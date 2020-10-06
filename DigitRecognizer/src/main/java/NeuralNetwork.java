@@ -16,14 +16,15 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
-public class NeuralNetwork {
+public class NeuralNetwork implements Algorithm {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(NeuralNetwork.class);
 
     private SparkSession sparkSession;
     private MultilayerPerceptronClassificationModel model;
 
-    public void init() {
+    @Override
+    public void init() throws IOException {
         initSparkSession();
         if (model == null) {
             LOGGER.info("Loading the Neural Network from saved model ... ");
@@ -32,7 +33,8 @@ public class NeuralNetwork {
         }
     }
 
-    public void train(Integer trainData, Integer testFieldValue) {
+    @Override
+    public void train(Integer trainData, Integer testFieldValue) throws IOException{
 
         initSparkSession();
 
@@ -76,9 +78,10 @@ public class NeuralNetwork {
         sparkSession.sparkContext().setCheckpointDir("checkPoint");
     }
 
-    public LabeledImage predict(LabeledImage labeledImage) {
+    @Override
+    public int predict(LabeledImage labeledImage) {
         double predict = model.predict(labeledImage.getFeatures());
         labeledImage.setLabel(predict);
-        return labeledImage;
+        return (int)labeledImage.getLabel();
     }
 }

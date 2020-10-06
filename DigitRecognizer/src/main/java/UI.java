@@ -83,8 +83,8 @@ public class UI {
             BufferedImage scaledBuffered = toBufferedImage(scaled);
             double[] scaledPixels = transformImageToOneDimensionalVector(scaledBuffered);
             LabeledImage labeledImage = new LabeledImage(0, scaledPixels);
-            LabeledImage predict = neuralNetwork.predict(labeledImage);
-            JLabel predictNumber = new JLabel("" + (int) predict.getLabel());
+            int predict = neuralNetwork.predict(labeledImage);
+            JLabel predictNumber = new JLabel("" + predict);
             predictNumber.setForeground(Color.RED);
             predictNumber.setFont(new Font("SansSerif", Font.BOLD, 128));
             resultPanel.removeAll();
@@ -147,6 +147,9 @@ public class UI {
                         LOGGER.info("Start of train Neural Network");
                         neuralNetwork.train((Integer) trainField.getValue(), (Integer) testField.getValue());
                         LOGGER.info("End of train Neural Network");
+                    } catch (IOException e1) {
+                        LOGGER.error("NN not trained " + e1);
+                        throw new RuntimeException(e1);
                     } finally {
                         progressBar.setVisible(false);
                     }
