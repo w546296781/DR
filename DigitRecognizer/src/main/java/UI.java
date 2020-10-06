@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 
 public class UI {
 	private static UI instance; 
+	private ImageProcessor imageProcessor;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UI.class);
 
@@ -41,6 +42,7 @@ public class UI {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         UIManager.put("Button.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
         UIManager.put("ProgressBar.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
+        imageProcessor = new ImageProcessor();
         AlgorithmFactory algorithmFactory = new AlgorithmFactory();
         neuralNetwork = algorithmFactory.getAlgorithm("NN");
         convolutionalNeuralNetwork = algorithmFactory.getAlgorithm("CNN");
@@ -81,11 +83,7 @@ public class UI {
         JButton recognizeCNN = new JButton("Recognize Digit With Conv NN");
         recognize.addActionListener(e -> {
             Image drawImage = drawArea.getImage();
-            BufferedImage sbi = toBufferedImage(drawImage);
-            Image scaled = scale(sbi);
-            BufferedImage scaledBuffered = toBufferedImage(scaled);
-            double[] scaledPixels = transformImageToOneDimensionalVector(scaledBuffered);
-            LabeledImage labeledImage = new LabeledImage(0, scaledPixels);
+            LabeledImage labeledImage = imageProcessor.GetProcessedImage(drawImage);
             int predict = neuralNetwork.predict(labeledImage);
             JLabel predictNumber = new JLabel("" + predict);
             predictNumber.setForeground(Color.RED);
@@ -98,11 +96,7 @@ public class UI {
 
         recognizeCNN.addActionListener(e -> {
             Image drawImage = drawArea.getImage();
-            BufferedImage sbi = toBufferedImage(drawImage);
-            Image scaled = scale(sbi);
-            BufferedImage scaledBuffered = toBufferedImage(scaled);
-            double[] scaledPixels = transformImageToOneDimensionalVector(scaledBuffered);
-            LabeledImage labeledImage = new LabeledImage(0, scaledPixels);
+            LabeledImage labeledImage = imageProcessor.GetProcessedImage(drawImage);
             int predict = convolutionalNeuralNetwork.predict(labeledImage);
             JLabel predictNumber = new JLabel("" + predict);
             predictNumber.setForeground(Color.RED);
@@ -205,46 +199,7 @@ public class UI {
     }
 
 
-    private static BufferedImage scale(BufferedImage imageToScale) {
-        ResampleOp resizeOp = new ResampleOp(28, 28);
-        resizeOp.setFilter(ResampleFilters.getLanczos3Filter());
-        BufferedImage filter = resizeOp.filter(imageToScale, null);
-        return filter;
-    }
 
-    private static BufferedImage toBufferedImage(Image img) {
-        // Create a buffered image with transparency
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-        // Draw the image on to the buffered image
-        Graphics2D bGr = bimage.createGraphics();
-        bGr.drawImage(img, 0, 0, null);
-        bGr.dispose();
-
-        // Return the buffered image
-        return bimage;
-    }
-
-
-    private static double[] transformImageToOneDimensionalVector(BufferedImage img) {
-
-        double[] imageGray = new double[28 * 28];
-        int w = img.getWidth();
-        int h = img.getHeight();
-        int index = 0;
-        for (int i = 0; i < w; i++) {
-            for (int j = 0; j < h; j++) {
-                Color color = new Color(img.getRGB(j, i), true);
-                int red = (color.getRed());
-                int green = (color.getGreen());
-                int blue = (color.getBlue());
-                double v = 255 - (red + green + blue) / 3d;
-                imageGray[index] = v;
-                index++;
-            }
-        }
-        return imageGray;
-    }
 
 
     private JFrame createMainFrame() {
