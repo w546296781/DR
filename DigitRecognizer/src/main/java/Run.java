@@ -26,7 +26,7 @@ public class Run {
         setHadoopHomeEnvironmentVariable();
         ProgressBar progressBar = new ProgressBar(mainFrame, true);
         progressBar.showProgressBar("Collecting data this make take several seconds!");
-        UI ui = new UI();
+        UI ui = UI.getInstance();
         Executors.newCachedThreadPool().submit(()->{
             try {
                 ui.initUI();

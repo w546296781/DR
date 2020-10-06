@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 
 public class UI {
+	private static UI instance; 
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UI.class);
 
@@ -43,6 +44,13 @@ public class UI {
         neuralNetwork.init();
         convolutionalNeuralNetwork.init();
     }
+    
+    public static UI getInstance() throws Exception {  
+    	if (instance == null) {  
+    			instance = new UI();  
+    	}  
+    	return instance;  
+    }  
 
     public void initUI() {
         // create main frame
