@@ -198,10 +198,6 @@ public class UI {
         mainPanel.add(topPanel, BorderLayout.NORTH);
     }
 
-
-
-
-
     private JFrame createMainFrame() {
         JFrame mainFrame = new JFrame();
         mainFrame.setTitle("Digit Recognizer");
