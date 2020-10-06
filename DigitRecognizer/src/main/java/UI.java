@@ -21,8 +21,8 @@ public class UI {
 
     private static final int FRAME_WIDTH = 1200;
     private static final int FRAME_HEIGHT = 628;
-    private final NeuralNetwork neuralNetwork = new NeuralNetwork();
-    private final ConvolutionalNeuralNetwork convolutionalNeuralNetwork = new ConvolutionalNeuralNetwork();
+    private Algorithm neuralNetwork;
+    private Algorithm convolutionalNeuralNetwork;
 
     private DrawArea drawArea;
     private JFrame mainFrame;
@@ -41,6 +41,9 @@ public class UI {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         UIManager.put("Button.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
         UIManager.put("ProgressBar.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
+        AlgorithmFactory algorithmFactory = new AlgorithmFactory();
+        neuralNetwork = algorithmFactory.getAlgorithm("NN");
+        convolutionalNeuralNetwork = algorithmFactory.getAlgorithm("CNN");
         neuralNetwork.init();
         convolutionalNeuralNetwork.init();
     }
