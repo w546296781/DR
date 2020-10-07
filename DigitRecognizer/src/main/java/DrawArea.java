@@ -28,32 +28,9 @@ public class DrawArea extends JComponent {
                 "Please draw a digit",
                 TitledBorder.LEFT,
                 TitledBorder.TOP, sansSerifBold, Color.BLUE));
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                // save coord x,y when mouse is pressed
                 oldX = e.getX();
-                oldY = e.getY();
-            }
-        });
-
-        addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                // coord x,y when drag mouse
-                currentX = e.getX();
-                currentY = e.getY();
-
-                if (g2 != null) {
-                    g2.setStroke(new BasicStroke(10));
-                    // draw line if g2 context not null
-                    g2.drawLine(oldX, oldY, currentX, currentY);
-                    // refresh draw area to repaint
-                    repaint();
-                    // store current coords x,y as olds x,y
-                    oldX = currentX;
-                    oldY = currentY;
-                }
-            }
-        });
+        addMouseListener(new DrawAreaObserver(this));
+        addMouseMotionListener(new DrawAreaObserver(this));
     }
 
     protected void paintComponent(Graphics g) {
@@ -66,7 +43,6 @@ public class DrawArea extends JComponent {
             // clear draw area
             clear();
         }
-
         g.drawImage(image, 0, 0, null);
     }
 
@@ -85,4 +61,24 @@ public class DrawArea extends JComponent {
     public void setImage(Image image) {
         this.image = image;
     }
+    
+	public void drawImage(int x, int y) {
+		currentX = x;
+		currentY = y;
+	    if (g2 != null) {
+	       g2.setStroke(new BasicStroke(10));
+	       // draw line if g2 context not null
+	       g2.drawLine(oldX, oldY, currentX, currentY);
+	       // refresh draw area to repaint
+	       repaint();
+	       // store current coords x,y as olds x,y
+	       oldX = currentX;
+	       oldY = currentY;
+	   }
+	}
+	
+	public void getNowCordinate(int x, int y) {
+		oldX = x;
+		oldY = y;
+	}
 }
