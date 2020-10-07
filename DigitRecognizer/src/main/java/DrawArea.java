@@ -28,7 +28,6 @@ public class DrawArea extends JComponent {
                 "Please draw a digit",
                 TitledBorder.LEFT,
                 TitledBorder.TOP, sansSerifBold, Color.BLUE));
-                oldX = e.getX();
         addMouseListener(new DrawAreaObserver(this));
         addMouseMotionListener(new DrawAreaObserver(this));
     }
