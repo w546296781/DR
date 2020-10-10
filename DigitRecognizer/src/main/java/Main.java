@@ -23,25 +23,32 @@ public class Main {
     private final static Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
+        LOGGER.info("Application is starting ... ");
+        
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         UIManager.put("Button.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
         UIManager.put("ProgressBar.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
 
-        LOGGER.info("Application is starting ... ");
 
-        JFrame mainFrame = UI.getNewFrame();
-        ProgressBar progressBar = new ProgressBar(mainFrame, true);
-        progressBar.showProgressBar("Collecting data this make take several seconds!");
+        setHadoopHomeEnvironmentVariable();
         UI ui = UI.getInstance();
-        Executors.newCachedThreadPool().submit(()->{
-            try {
-                ui.initUI();
-            } finally {
-                progressBar.setVisible(false);
-                mainFrame.dispose();
-            }
-        });
+        ui.initUI();
     }
 
+    private static void setHadoopHomeEnvironmentVariable() throws Exception {
+        HashMap<String, String> hadoopEnvSetUp = new HashMap<>();
+        hadoopEnvSetUp.put("HADOOP_HOME", new File("resources/winutils-master/hadoop-2.8.1").getAbsolutePath());
+        Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
+        Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
+        theEnvironmentField.setAccessible(true);
+        Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
+        env.clear();
+        env.putAll(hadoopEnvSetUp);
+        Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+        theCaseInsensitiveEnvironmentField.setAccessible(true);
+        Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
+        cienv.clear();
+        cienv.putAll(hadoopEnvSetUp);
+    }
 
 }
