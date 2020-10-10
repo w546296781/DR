@@ -39,9 +39,6 @@ public class UI {
     private JPanel resultPanel;
 
     public UI() throws Exception {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        UIManager.put("Button.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
-        UIManager.put("ProgressBar.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
         imageProcessor = new ImageProcessor();
         AlgorithmFactory algorithmFactory = new AlgorithmFactory();
         neuralNetwork = algorithmFactory.getAlgorithm("NN");
@@ -221,6 +218,10 @@ public class UI {
         signature.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20));
         signature.setForeground(Color.BLUE);
         mainPanel.add(signature, BorderLayout.SOUTH);
+    }
+    
+    public static JFrame getNewFrame() {
+    	return new JFrame();
     }
 
 }
