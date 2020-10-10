@@ -35,8 +35,10 @@ public class Main {
         ui.initUI();
     }
 
+    //This is only for windows
     private static void setHadoopHomeEnvironmentVariable() throws Exception {
         HashMap<String, String> hadoopEnvSetUp = new HashMap<>();
+        //File config or singleton
         hadoopEnvSetUp.put("HADOOP_HOME", new File("resources/winutils-master/hadoop-2.8.1").getAbsolutePath());
         Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
         Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
