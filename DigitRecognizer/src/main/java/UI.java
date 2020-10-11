@@ -19,7 +19,7 @@ public class UI {
     private static final int FRAME_HEIGHT = 628;
     private Algorithm neuralNetwork;
     private Algorithm convolutionalNeuralNetwork;
-    private DrawArea drawArea;
+    private DrawAreaController drawArea;
     private JFrame mainFrame;
     private JPanel mainPanel;
     private JPanel drawAndDigitPredictionPanel;
@@ -111,7 +111,7 @@ public class UI {
 
     private void addDrawAreaAndPredictionArea() {
 
-        drawArea = new DrawArea();
+        drawArea = new DrawAreaController();
 
         drawAndDigitPredictionPanel.add(drawArea);
         resultPanel = new JPanel();

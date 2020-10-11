@@ -8,8 +8,8 @@ import java.awt.event.MouseMotionListener;
  * @created on 10/07/2020
  */
 public class DrawAreaObserver implements MouseMotionListener, MouseListener{
-	DrawArea drawArea;
-	public DrawAreaObserver(DrawArea drawArea) {
+	DrawAreaController drawArea;
+	public DrawAreaObserver(DrawAreaController drawArea) {
 		this.drawArea = drawArea;
 	}
 
