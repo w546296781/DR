@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,9 +7,8 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 /**
- * Component for drawing !
- *
  * @author sylsau
+ * @modified ShihYu Chang
  */
 public class DrawArea extends JComponent {
 

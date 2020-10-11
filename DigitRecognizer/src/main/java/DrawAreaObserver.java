@@ -3,7 +3,10 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
+/**
+ * @author ShihYu Chang
+ * @created on 10/07/2020
+ */
 public class DrawAreaObserver implements MouseMotionListener, MouseListener{
 	DrawArea drawArea;
 	public DrawAreaObserver(DrawArea drawArea) {
