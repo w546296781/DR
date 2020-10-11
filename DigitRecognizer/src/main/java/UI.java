@@ -157,8 +157,4 @@ public class UI {
     public static JFrame getNewFrame() {
     	return new JFrame();
     }
-    
-    private void aboutAction() {
-    	
-    }
 }
