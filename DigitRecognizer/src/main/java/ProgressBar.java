@@ -1,10 +1,8 @@
-
-
 import javax.swing.*;
 import java.awt.*;
-
 /**
- * Created by klevis.ramo on 11/29/2017.
+ * @author klevis.ramo
+ * @Created on 11/27/2017
  */
 public class ProgressBar {
 
@@ -42,7 +40,6 @@ public class ProgressBar {
             mainFrame.repaint();
         });
     }
-
 
     private JProgressBar createProgressBar(JFrame mainFrame) {
         JProgressBar jProgressBar = new JProgressBar(JProgressBar.HORIZONTAL);

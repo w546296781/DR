@@ -1,10 +1,7 @@
-
-
 import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
@@ -17,15 +14,12 @@ import java.util.concurrent.Executors;
 public class UI {
 	private static UI instance; 
 	private ImageProcessor imageProcessor;
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(UI.class);
-
-    private static final int FRAME_WIDTH = 1200;
+	private final static Logger LOGGER = LoggerFactory.getLogger(UI.class);
+	private static final int FRAME_WIDTH = 1200;
     private static final int FRAME_HEIGHT = 628;
     private Algorithm neuralNetwork;
     private Algorithm convolutionalNeuralNetwork;
-
-    private DrawArea drawArea;
+    private DrawAreaController drawArea;
     private JFrame mainFrame;
     private JPanel mainPanel;
     private JPanel drawAndDigitPredictionPanel;
@@ -55,7 +49,6 @@ public class UI {
     }  
 
     public void initUI() {
-        // create main frame
         mainFrame = createMainFrame();
 
         mainPanel = new JPanel();
@@ -118,7 +111,7 @@ public class UI {
 
     private void addDrawAreaAndPredictionArea() {
 
-        drawArea = new DrawArea();
+        drawArea = new DrawAreaController();
 
         drawAndDigitPredictionPanel.add(drawArea);
         resultPanel = new JPanel();

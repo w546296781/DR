@@ -2,12 +2,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-
 import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 
 public class ImageProcessor {
-	
 	public LabeledImage GetProcessedImage(Image drawImage ) {
         BufferedImage sbi = toBufferedImage(drawImage);
         Image scaled = scale(sbi);
@@ -25,21 +23,15 @@ public class ImageProcessor {
     }
 
     private static BufferedImage toBufferedImage(Image img) {
-        // Create a buffered image with transparency
         BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-        // Draw the image on to the buffered image
         Graphics2D bGr = bimage.createGraphics();
         bGr.drawImage(img, 0, 0, null);
         bGr.dispose();
-
-        // Return the buffered image
         return bimage;
     }
 
 
     private static double[] transformImageToOneDimensionalVector(BufferedImage img) {
-
         double[] imageGray = new double[28 * 28];
         int w = img.getWidth();
         int h = img.getHeight();
