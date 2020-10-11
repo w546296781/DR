@@ -1,9 +1,3 @@
-
-
-/**
- * Created by klevis.ramo on 11/27/2017.
- */
-
 import org.apache.spark.ml.classification.MultilayerPerceptronClassificationModel;
 import org.apache.spark.ml.classification.MultilayerPerceptronClassifier;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
@@ -12,14 +6,14 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * @author klevis.ramo
+ * @Created on 11/27/2017
+ */
 public class NeuralNetwork implements Algorithm {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(NeuralNetwork.class);
-
+	private final static Logger LOGGER = LoggerFactory.getLogger(NeuralNetwork.class);
     private SparkSession sparkSession;
     private MultilayerPerceptronClassificationModel model;
 
@@ -35,12 +29,9 @@ public class NeuralNetwork implements Algorithm {
 
     @Override
     public void train(Integer trainData, Integer testFieldValue) throws IOException{
-
-        initSparkSession();
-
-        List<LabeledImage> labeledImages = IdxReader.loadData(trainData);
+    	initSparkSession();
+    	List<LabeledImage> labeledImages = IdxReader.loadData(trainData);
         List<LabeledImage> testLabeledImages = IdxReader.loadTestData(testFieldValue);
-
         Dataset<Row> train = sparkSession.createDataFrame(labeledImages, LabeledImage.class).checkpoint();
         Dataset<Row> test = sparkSession.createDataFrame(testLabeledImages, LabeledImage.class).checkpoint();
 
@@ -74,7 +65,6 @@ public class NeuralNetwork implements Algorithm {
                     .appName("Digit Recognizer")
                     .getOrCreate();
         }
-
         sparkSession.sparkContext().setCheckpointDir("checkPoint");
     }
 

@@ -1,10 +1,7 @@
-
-
 import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
@@ -17,15 +14,12 @@ import java.util.concurrent.Executors;
 public class UI {
 	private static UI instance; 
 	private ImageProcessor imageProcessor;
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(UI.class);
-
-    private static final int FRAME_WIDTH = 1200;
+	private final static Logger LOGGER = LoggerFactory.getLogger(UI.class);
+	private static final int FRAME_WIDTH = 1200;
     private static final int FRAME_HEIGHT = 628;
     private Algorithm neuralNetwork;
     private Algorithm convolutionalNeuralNetwork;
-
-    private DrawArea drawArea;
+    private DrawAreaController drawArea;
     private JFrame mainFrame;
     private JPanel mainPanel;
     private JPanel drawAndDigitPredictionPanel;
@@ -37,7 +31,8 @@ public class UI {
     private SpinnerNumberModel modelTestSize;
     private JSpinner testField;
     private JPanel resultPanel;
-
+    private JPanel actionPanel;
+    
     public UI() throws Exception {
         imageProcessor = new ImageProcessor();
         AlgorithmFactory algorithmFactory = new AlgorithmFactory();
@@ -55,17 +50,14 @@ public class UI {
     }  
 
     public void initUI() {
-        // create main frame
         mainFrame = createMainFrame();
-
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-
-        addTopPanel();
-
         drawAndDigitPredictionPanel = new JPanel(new GridLayout());
+        actionPanel = new JPanel(new GridLayout());
         addActionPanel();
         addDrawAreaAndPredictionArea();
+        mainPanel.add(actionPanel, BorderLayout.NORTH);
         mainPanel.add(drawAndDigitPredictionPanel, BorderLayout.CENTER);
 
         addSignature();
@@ -74,10 +66,20 @@ public class UI {
         mainFrame.setVisible(true);
 
     }
-
+    
     private void addActionPanel() {
+    	JButton about = new JButton("About");
         JButton recognize = new JButton("Recognize Digit With Simple NN");
         JButton recognizeCNN = new JButton("Recognize Digit With Conv NN");
+        about.addActionListener(e -> {
+            JDialog d = new JDialog(mainFrame, "About");
+            JLabel l = new JLabel("Recognize Digit");
+            d.setLocationRelativeTo(actionPanel);
+            d.add(l);
+            d.setSize(300,150);
+            d.setVisible(true);
+        });
+        
         recognize.addActionListener(e -> {
             Image drawImage = drawArea.getImage();
             LabeledImage labeledImage = imageProcessor.GetProcessedImage(drawImage);
@@ -103,96 +105,28 @@ public class UI {
             resultPanel.updateUI();
 
         });
+        
         JButton clear = new JButton("Clear");
         clear.addActionListener(e -> {
             drawArea.setImage(null);
             drawArea.repaint();
             drawAndDigitPredictionPanel.updateUI();
         });
-        JPanel actionPanel = new JPanel(new GridLayout(8, 1));
+        
+        actionPanel.add(about);
         actionPanel.add(recognizeCNN);
         actionPanel.add(recognize);
         actionPanel.add(clear);
-        drawAndDigitPredictionPanel.add(actionPanel);
+        actionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
     }
 
     private void addDrawAreaAndPredictionArea() {
 
-        drawArea = new DrawArea();
-
-        drawAndDigitPredictionPanel.add(drawArea);
+        drawArea = new DrawAreaController();
+        drawAndDigitPredictionPanel.add(drawArea, BorderLayout.EAST);
         resultPanel = new JPanel();
         resultPanel.setLayout(new GridBagLayout());
-        drawAndDigitPredictionPanel.add(resultPanel);
-    }
-
-    private void addTopPanel() {
-        JPanel topPanel = new JPanel(new FlowLayout());
-        JButton trainNN = new JButton("Train NN");
-        trainNN.addActionListener(e -> {
-
-            int i = JOptionPane.showConfirmDialog(mainFrame, "Are you sure this may take some time to train?");
-
-            if (i == JOptionPane.OK_OPTION) {
-                ProgressBar progressBar = new ProgressBar(mainFrame);
-                SwingUtilities.invokeLater(() -> progressBar.showProgressBar("Training may take one or two minutes..."));
-                Executors.newCachedThreadPool().submit(() -> {
-                    try {
-                        LOGGER.info("Start of train Neural Network");
-                        neuralNetwork.train((Integer) trainField.getValue(), (Integer) testField.getValue());
-                        LOGGER.info("End of train Neural Network");
-                    } catch (IOException e1) {
-                        LOGGER.error("NN not trained " + e1);
-                        throw new RuntimeException(e1);
-                    } finally {
-                        progressBar.setVisible(false);
-                    }
-                });
-            }
-        });
-
-        JButton trainCNN = new JButton("Train Convolutional NN");
-        trainCNN.addActionListener(e -> {
-
-            int i = JOptionPane.showConfirmDialog(mainFrame, "Are you sure, training requires >10GB memory and more than 1 hour?");
-
-            if (i == JOptionPane.OK_OPTION) {
-                ProgressBar progressBar = new ProgressBar(mainFrame);
-                SwingUtilities.invokeLater(() -> progressBar.showProgressBar("Training may take a while..."));
-                Executors.newCachedThreadPool().submit(() -> {
-                    try {
-                        LOGGER.info("Start of train Convolutional Neural Network");
-                        convolutionalNeuralNetwork.train((Integer) trainField.getValue(), (Integer) testField.getValue());
-                        LOGGER.info("End of train Convolutional Neural Network");
-                    } catch (IOException e1) {
-                        LOGGER.error("CNN not trained " + e1);
-                        throw new RuntimeException(e1);
-                    } finally {
-                        progressBar.setVisible(false);
-                    }
-                });
-            }
-        });
-
-        topPanel.add(trainCNN);
-        topPanel.add(trainNN);
-        JLabel tL = new JLabel("Training Data");
-        tL.setFont(sansSerifBold);
-        topPanel.add(tL);
-        modelTrainSize = new SpinnerNumberModel(TRAIN_SIZE, 10000, 60000, 1000);
-        trainField = new JSpinner(modelTrainSize);
-        trainField.setFont(sansSerifBold);
-        topPanel.add(trainField);
-
-        JLabel ttL = new JLabel("Test Data");
-        ttL.setFont(sansSerifBold);
-        topPanel.add(ttL);
-        modelTestSize = new SpinnerNumberModel(TEST_SIZE, 1000, 10000, 500);
-        testField = new JSpinner(modelTestSize);
-        testField.setFont(sansSerifBold);
-        topPanel.add(testField);
-
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+        drawAndDigitPredictionPanel.add(resultPanel, BorderLayout.WEST);
     }
 
     private JFrame createMainFrame() {
@@ -223,5 +157,4 @@ public class UI {
     public static JFrame getNewFrame() {
     	return new JFrame();
     }
-
 }

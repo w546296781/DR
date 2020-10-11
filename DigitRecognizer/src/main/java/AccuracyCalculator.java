@@ -1,5 +1,3 @@
-
-
 import org.deeplearning4j.datasets.iterator.impl.MnistDataSetIterator;
 import org.deeplearning4j.earlystopping.scorecalc.ScoreCalculator;
 import org.deeplearning4j.eval.Evaluation;
@@ -7,9 +5,9 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 /**
- * Created by klevis.ramo on 12/13/2017.
+ * @author klevis.ramo
+ * @Created on 12/13/2017.
  */
 public class AccuracyCalculator implements ScoreCalculator<MultiLayerNetwork> {
 

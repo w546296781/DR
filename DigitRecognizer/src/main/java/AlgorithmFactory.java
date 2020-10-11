@@ -1,4 +1,7 @@
-
+/**
+ * @author Xinkai Wang
+ * @Created on 10/06/2020
+ */
 public class AlgorithmFactory {
 	
 	public Algorithm getAlgorithm(String algorithmType){

@@ -1,5 +1,3 @@
-
-
 import org.deeplearning4j.datasets.iterator.impl.MnistDataSetIterator;
 import org.deeplearning4j.earlystopping.EarlyStoppingConfiguration;
 import org.deeplearning4j.earlystopping.EarlyStoppingResult;
@@ -24,13 +22,12 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 /**
- * Created by agibsonccc on 9/16/15.
+ * @author agibsonccc
+ * @Created on 9/16/15
  */
 public class ConvolutionalNeuralNetwork implements Algorithm {
 
