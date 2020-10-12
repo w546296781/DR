@@ -14,7 +14,9 @@ import java.util.concurrent.Executors;
  * @Created on 11/24/2017.
  * @modified XinKai Wang
  */
+
 public class Main {
+	private final static String HADOOP_FILE_PATH = "resources/winutils-master/hadoop-2.8.1";
     private final static Logger LOGGER = LoggerFactory.getLogger(Main.class);
     public static void main(String[] args) throws Exception {
         LOGGER.info("Application is starting ... ");
@@ -22,13 +24,21 @@ public class Main {
         UIManager.put("Button.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
         UIManager.put("ProgressBar.font", new FontUIResource(new Font("Dialog", Font.BOLD, 18)));
         setHadoopHomeEnvironmentVariable();
-        UI ui = UI.getInstance();
-        ui.initUI();
+        AlgorithmFactory algorithmFactory = new AlgorithmFactory();
+        Algorithm neuralNetwork = algorithmFactory.getAlgorithm("NN");
+        Algorithm convolutionalNeuralNetwork = algorithmFactory.getAlgorithm("CNN");
+        try {
+        	neuralNetwork.init();
+        	convolutionalNeuralNetwork.init();
+        } catch(Exception e){
+        	
+        }
+        UI.getInstance(neuralNetwork, convolutionalNeuralNetwork);
     }
 
     private static void setHadoopHomeEnvironmentVariable() throws Exception {
         HashMap<String, String> hadoopEnvSetUp = new HashMap<>();
-        hadoopEnvSetUp.put("HADOOP_HOME", new File("resources/winutils-master/hadoop-2.8.1").getAbsolutePath());
+        hadoopEnvSetUp.put("HADOOP_HOME", new File(HADOOP_FILE_PATH).getAbsolutePath());
         Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
         Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
         theEnvironmentField.setAccessible(true);
