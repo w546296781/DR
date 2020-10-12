@@ -27,37 +27,6 @@ public class NeuralNetwork implements Algorithm {
         }
     }
 
-    @Override
-    public void train(Integer trainData, Integer testFieldValue) throws IOException{
-    	initSparkSession();
-    	List<LabeledImage> labeledImages = IdxReader.loadData(trainData);
-        List<LabeledImage> testLabeledImages = IdxReader.loadTestData(testFieldValue);
-        Dataset<Row> train = sparkSession.createDataFrame(labeledImages, LabeledImage.class).checkpoint();
-        Dataset<Row> test = sparkSession.createDataFrame(testLabeledImages, LabeledImage.class).checkpoint();
-
-        int[] layers = new int[]{784, 128, 64, 10};
-
-        MultilayerPerceptronClassifier trainer = new MultilayerPerceptronClassifier()
-                .setLayers(layers)
-                .setBlockSize(128)
-                .setSeed(1234L)
-                .setMaxIter(100);
-
-        model = trainer.fit(train);
-
-        evalOnTest(test);
-        evalOnTest(train);
-    }
-
-    private void evalOnTest(Dataset<Row> test) {
-        Dataset<Row> result = model.transform(test);
-        Dataset<Row> predictionAndLabels = result.select("prediction", "label");
-        MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
-                .setMetricName("accuracy");
-
-        LOGGER.info("Test set accuracy = " + evaluator.evaluate(predictionAndLabels));
-    }
-
     private void initSparkSession() {
         if (sparkSession == null) {
             sparkSession = SparkSession.builder()
