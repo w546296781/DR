@@ -17,8 +17,6 @@ public class UI {
 	private final static Logger LOGGER = LoggerFactory.getLogger(UI.class);
 	private static final int FRAME_WIDTH = 1200;
     private static final int FRAME_HEIGHT = 628;
-    private Algorithm neuralNetwork;
-    private Algorithm convolutionalNeuralNetwork;
     private DrawAreaController drawArea;
     private JFrame mainFrame;
     private JPanel mainPanel;
@@ -33,41 +31,30 @@ public class UI {
     private JPanel resultPanel;
     private JPanel actionPanel;
     
-    public UI() throws Exception {
+    public UI(Algorithm neuralNetwork, Algorithm convolutionalNeuralNetwork) throws Exception {
         imageProcessor = new ImageProcessor();
-        AlgorithmFactory algorithmFactory = new AlgorithmFactory();
-        neuralNetwork = algorithmFactory.getAlgorithm("NN");
-        convolutionalNeuralNetwork = algorithmFactory.getAlgorithm("CNN");
-        neuralNetwork.init();
-        convolutionalNeuralNetwork.init();
-    }
-    
-    public static UI getInstance() throws Exception {  
-    	if (instance == null) {  
-    			instance = new UI();  
-    	}  
-    	return instance;  
-    }  
-
-    public void initUI() {
         mainFrame = createMainFrame();
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         drawAndDigitPredictionPanel = new JPanel(new GridLayout());
         actionPanel = new JPanel(new GridLayout());
-        addActionPanel();
+        addActionPanel(neuralNetwork, convolutionalNeuralNetwork);
         addDrawAreaAndPredictionArea();
         mainPanel.add(actionPanel, BorderLayout.NORTH);
         mainPanel.add(drawAndDigitPredictionPanel, BorderLayout.CENTER);
-
         addSignature();
-
         mainFrame.add(mainPanel, BorderLayout.CENTER);
         mainFrame.setVisible(true);
-
     }
     
-    private void addActionPanel() {
+    public static UI getInstance(Algorithm neuralNetwork, Algorithm convolutionalNeuralNetwork) throws Exception {  
+    	if (instance == null) {  
+    			instance = new UI(neuralNetwork, convolutionalNeuralNetwork);  
+    	}  
+    	return instance;  
+    } 
+    
+    private void addActionPanel(Algorithm neuralNetwork, Algorithm convolutionalNeuralNetwork) {
     	JButton about = new JButton("About");
         JButton recognize = new JButton("Recognize Digit With Simple NN");
         JButton recognizeCNN = new JButton("Recognize Digit With Conv NN");
