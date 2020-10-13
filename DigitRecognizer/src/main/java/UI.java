@@ -21,13 +21,6 @@ public class UI {
     private JFrame mainFrame;
     private JPanel mainPanel;
     private JPanel drawAndDigitPredictionPanel;
-    private SpinnerNumberModel modelTrainSize;
-    private JSpinner trainField;
-    private int TRAIN_SIZE = 30000;
-    private final Font sansSerifBold = new Font("SansSerif", Font.BOLD, 18);
-    private int TEST_SIZE = 10000;
-    private SpinnerNumberModel modelTestSize;
-    private JSpinner testField;
     private JPanel resultPanel;
     private JPanel actionPanel;
     
