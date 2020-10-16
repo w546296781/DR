@@ -24,7 +24,7 @@ public class UI {
     private JPanel resultPanel;
     private JPanel actionPanel;
     
-    public UI(Algorithm neuralNetwork, Algorithm convolutionalNeuralNetwork) throws Exception {
+    protected UI(Algorithm neuralNetwork, Algorithm convolutionalNeuralNetwork) throws Exception {
         imageProcessor = new ImageProcessor();
         mainFrame = createMainFrame();
         mainPanel = new JPanel();
