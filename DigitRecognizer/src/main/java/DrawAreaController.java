@@ -9,11 +9,12 @@ import javax.swing.border.TitledBorder;
  * @modified ShihYu Chang
  */
 public class DrawAreaController extends JComponent {
+	private static DrawAreaController instance; 
     private final Font sansSerifBold = new Font("SansSerif", Font.BOLD, 18);
     private Image image;
     private Graphics2D g2;
     private int currentX, currentY, oldX, oldY;
-    public DrawAreaController() {
+    protected DrawAreaController() {
         setDoubleBuffered(false);
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Please draw a digit",
@@ -21,6 +22,13 @@ public class DrawAreaController extends JComponent {
                 TitledBorder.TOP, sansSerifBold, Color.BLUE));
         addMouseListener(new DrawAreaObserver(this));
         addMouseMotionListener(new DrawAreaObserver(this));
+    }
+    
+    public static DrawAreaController getInstance() {
+    	if(instance == null) {
+    		instance = new DrawAreaController();
+    	}
+    	return instance;
     }
 
     protected void paintComponent(Graphics g) {
